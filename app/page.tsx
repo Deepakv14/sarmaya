@@ -8,6 +8,7 @@ import {
   type DiaryEntry,
   deleteEntry,
 } from "./lib/storage";
+import { Sun, Moon, NotebookPen, PenTool } from "lucide-react";
 
 type Reply = {
   message: string;
@@ -32,6 +33,7 @@ export default function Home() {
 
   const [currentTime, setCurrentTime] = useState("");
   const [currentDate, setCurrentDate] = useState("");
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   // Load saved entries on component mount
   useEffect(() => {
@@ -47,6 +49,14 @@ export default function Home() {
     };
 
     loadEntries();
+  }, []);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("sarmaya-theme");
+
+    if (saved === "light" || saved === "dark") {
+      setTheme(saved);
+    }
   }, []);
 
 
@@ -70,6 +80,13 @@ export default function Home() {
       })
     );
   }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+
+    setTheme(nextTheme);
+    localStorage.setItem("sarmaya-theme", nextTheme);
+  };
 
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -127,67 +144,146 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-black/10 text-zinc-100 flex flex-col items-center justify-start gap-6 p-6 md:p-12 font-sans" >
-      {/* Decorative top element */}
-      {/* <div className="w-full max-w-3xl flex justify-center mb-2">
-        <div className="w-20 h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-20" />
-      </div> */}
+    <div className={`relative min-h-screen flex flex-col items-center justify-start gap-6 p-6 md:p-12 font-sans ${theme === "dark"
+      ? "bg-black text-zinc-100"
+      : "bg-[#f5efe3] text-[#4a3728]"
+      }`} >
+
+      <div className="absolute top-6 right-6 z-50">
+        <button
+          onClick={toggleTheme}
+          className={`
+      relative flex items-center
+      h-12 w-24 rounded-full p-1
+      transition-all duration-300
+      ${theme === "dark"
+              ? "bg-zinc-900"
+              : "bg-zinc-200"
+            }
+    `}
+        >
+          <div
+            className={`
+        absolute h-10 w-10 rounded-full
+        flex items-center justify-center
+        transition-all duration-300
+        ${theme === "dark"
+                ? "translate-x-12 bg-zinc-800"
+                : "translate-x-0 bg-zinc-100"
+              }
+      `}
+          >
+            {theme === "dark" ? <Moon size={14} /> : <Sun size={14} />}
+          </div>
+
+          <div className="flex w-full justify-between px-3">
+            <Sun size={18} />
+            <Moon size={18} />
+          </div>
+        </button>
+      </div>
 
       <div className="flex w-full max-w-3xl flex-col gap-8">
         {/* Elegant Header */}
-        <div className="flex flex-col items-center gap-4 text-center">
-          <h1 className="font-mukta text-6xl md:text-4xl font-light text-zinc-100">सरमाया</h1>
-          <p className="text-xs italic max-w-sm opacity-40">Where your feelings find poetry, and your words find solace.</p>
-          <div className="w-20 h-1 bg-gradient-to-r from-transparent via-zinc-500 to-transparent opacity-30 " />
+        <div className="relative flex flex-col items-center gap-4 text-center">
+
+          <h1
+            className={`font-mukta text-4xl font-light ${theme === "dark"
+              ? "text-zinc-100"
+              : "text-[#5a3d2b]"
+              }`}
+          >
+            सरमाया
+          </h1>
+
+          <p className="text-xs italic max-w-sm opacity-40">
+            Where your feelings find poetry, and your words find solace.
+          </p>
         </div>
 
         {/* Main Writing Form */}
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-6 rounded-xl border border-zinc-800 p-4 transition-all"
+          className={`flex flex-col gap-6 rounded-xl border ${theme === "dark"
+            ? "border-zinc-800"
+            : "border-[#d8cdb8]"
+            } p-4 transition-all`}
         >
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             <span className="text-sm tracking-widest font-poppins opacity-80">
               {currentDate}
             </span>
-            <span className="text-xs opacity-60">
+            {/* <span className="text-xs opacity-60">
               {currentTime}
-            </span>
+            </span> */}
           </div>
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent opacity-30" />
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent opacity-50" />
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="pour your heart out here…"
             rows={8}
-            className="w-full resize-none rounded-lg p-2 font-light placeholder-opacity-100 text-zinc-400 outline-none font-serif"
+            className={`
+    w-full
+    resize-none
+    rounded-lg
+    p-2
+    outline-none
+    font-serif
+
+    ${theme === "dark"
+                ? "text-zinc-300 placeholder:text-zinc-600"
+                : "text-[#4a3728] placeholder:text-[#9b8b7d]"
+              }
+  `}
           />
           <button
             type="submit"
             disabled={!text.trim() || sending}
-            className="self-end rounded-lg px-8 py-2 text-sm font-normal text-zinc-500 "
+            className={`self-end rounded-lg px-8 py-2 text-sm font-normal ${theme === "dark"
+              ? "text-zinc-500 hover:text-zinc-400"
+              : "text-[#4a3728] hover:text-[#5a3d2b]"
+              }`}
           >
-            {sending ? "here we go…" : "Send"}
+            {sending && (
+              <div className="flex items-center gap-3 text-sm italic opacity-70">
+                <span className="animate-bounce">✒️</span>
+                <span>सर्माया कुछ ढूँढ रहा है...</span>
+              </div>
+            )}
+            {!sending && <PenTool opacity={0.6}/>}
           </button>
         </form>
 
         {entries.length > 0 && (
-          <div className="flex flex-col gap-4 rounded-xl border border-zinc-800 p-6">
+          <div className={`flex flex-col gap-6 rounded-xl border ${theme === "dark"
+            ? "border-zinc-800"
+            : "border-[#d8cdb8]"
+            } p-4 transition-all`}>
             <div className="flex flex-col gap-3">
-              <div>
-                <span className="text-xs uppercase text-zinc-600">Me</span>
-                <p className="mt-1 text-sm whitespace-pre-wrap font-poppins">
+              <div >
+                <span className={`text-xs ${theme === "dark"
+                  ? "text-zinc-600"
+                  : "text-[#9b8b7d]"
+                  }`}>Me</span>
+                <p className="text-sm font-poppins">
                   {entries[0].userMessage}
                 </p>
               </div>
 
               {entries[0].reply && (
-                <div className="border-t border-zinc-800 pt-4">
-                  <span className="text-xs uppercase text-zinc-600">
+                <div className="border-t border-zinc-900/10 pt-1">
+                  <span className={`text-xs ${theme === "dark"
+                    ? "text-zinc-600"
+                    : "text-[#9b8b7d]"
+                    }`}>
                     Sarmaya
                   </span>
 
-                  <p className="mt-1 whitespace-pre-wrap leading-relaxed italic text-zinc-300">
+                  <p className={`mt-1 text-sm italic ${theme === "dark"
+                    ? "text-zinc-300"
+                    : "text-[#4a3728]"
+                    }`}>
                     {entries[0].reply.message}
                   </p>
                 </div>
@@ -202,7 +298,7 @@ export default function Home() {
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-3">
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-10" />
-              <h2 className="text-sm font-medium uppercase tracking-widest text-zinc-300 whitespace-nowrap">
+              <h2 className={`text-sm font-medium uppercase tracking-widest whitespace-nowrap ${theme === "dark"              ? "text-zinc-600" : "text-[#9b8b7d]"}`}>
                 ✦ Recent Entries ✦
               </h2>
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-10" />
@@ -214,7 +310,7 @@ export default function Home() {
                 Clear All
               </button>
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 ">
               {entries.map((entry) => {
                 const isExpanded = expandedId === entry.id;
                 return (
@@ -223,7 +319,7 @@ export default function Home() {
                     onClick={() =>
                       setExpandedId(isExpanded ? null : entry.id)
                     }
-                    className="flex flex-col gap-3 rounded-xl border border-zinc-800 p-5 text-left transition-all hover:border-zinc-700"
+                    className="flex flex-col gap-3 rounded-xl border border-zinc-800/10 p-5 text-left transition-all hover:border-zinc-700/20"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs uppercase tracking-widest font-medium opacity-70">
