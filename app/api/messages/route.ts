@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const { output } = await generateText({
-      model: openai("gpt-4o-mini"),
+      model: openai("gpt-4o"),
       system: system_prompt,
       prompt: received,
       output: Output.object({ schema: replySchema }),
