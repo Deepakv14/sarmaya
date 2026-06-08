@@ -149,38 +149,54 @@ export default function Home() {
       : "bg-[#f5efe3] text-[#4a3728]"
       }`} >
 
-      <div className="absolute top-6 right-6 z-50">
-        <button
-          onClick={toggleTheme}
-          className={`
-      relative flex items-center
-      h-12 w-24 rounded-full p-1
-      transition-all duration-300
-      ${theme === "dark"
-              ? "bg-zinc-900"
-              : "bg-zinc-200"
-            }
-    `}
-        >
-          <div
+      <div className="w-full max-w-2xl relative">
+        <div className="absolute -top-2 right-0 z-50">
+          <button
+            onClick={toggleTheme}
             className={`
-        absolute h-10 w-10 rounded-full
+      relative flex items-center
+
+      h-10 w-20
+      md:h-12 md:w-24
+
+      rounded-full p-1
+      transition-all duration-300
+
+      ${theme === "dark"
+                ? "bg-zinc-900"
+                : "bg-zinc-200"
+              }
+    `}
+          >
+            <div
+              className={`
+        absolute
+
+        h-8 w-8
+        md:h-10 md:w-10
+
+        rounded-full
         flex items-center justify-center
         transition-all duration-300
-        ${theme === "dark"
-                ? "translate-x-12 bg-zinc-800"
-                : "translate-x-0 bg-zinc-100"
-              }
-      `}
-          >
-            {theme === "dark" ? <Moon size={14} /> : <Sun size={14} />}
-          </div>
 
-          <div className="flex w-full justify-between px-3">
-            <Sun size={18} />
-            <Moon size={18} />
-          </div>
-        </button>
+        ${theme === "dark"
+                  ? "translate-x-10 md:translate-x-12 bg-zinc-800"
+                  : "translate-x-0 bg-zinc-100"
+                }
+      `}
+            >
+              {theme === "dark"
+                ? <Moon size={12} className="md:w-[14px] md:h-[14px]" />
+                : <Sun size={12} className="md:w-[14px] md:h-[14px]" />
+              }
+            </div>
+
+            <div className="flex w-full justify-between px-2 md:px-3">
+              <Sun size={14} className="md:w-[18px] md:h-[18px]" />
+              <Moon size={14} className="md:w-[18px] md:h-[18px]" />
+            </div>
+          </button>
+        </div>
       </div>
 
       <div className="flex w-full max-w-3xl flex-col gap-8">
@@ -249,10 +265,10 @@ export default function Home() {
             {sending && (
               <div className="flex items-center gap-3 text-sm italic opacity-70">
                 <span className="animate-bounce">✒️</span>
-                <span>सर्माया कुछ ढूँढ रहा है...</span>
+                <span>sending...</span>
               </div>
             )}
-            {!sending && <PenTool opacity={0.6}/>}
+            {!sending && <PenTool opacity={0.6} />}
           </button>
         </form>
 
@@ -299,7 +315,7 @@ export default function Home() {
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-3">
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-10" />
-              <h2 className={`text-sm font-medium uppercase tracking-widest whitespace-nowrap ${theme === "dark"              ? "text-zinc-600" : "text-[#9b8b7d]"}`}>
+              <h2 className={`text-sm font-medium uppercase tracking-widest whitespace-nowrap ${theme === "dark" ? "text-zinc-600" : "text-[#9b8b7d]"}`}>
                 ✦ Recent Entries ✦
               </h2>
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-10" />
@@ -378,6 +394,9 @@ export default function Home() {
           <p className="text-center text-sm opacity-60 italic">Loading your memories…</p>
         )}
       </div>
+      <span className={`fixed bottom-4 text-xs opacity-50 ${theme === "dark" ? "text-zinc-600" : "text-[#9b8b7d]"}`}>
+        Made with ❤️ by Debug </span>
+      
     </div>
   );
 }
