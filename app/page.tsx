@@ -210,7 +210,8 @@ export default function Home() {
             } p-4 transition-all`}
         >
           <div className="flex flex-col">
-            <span className="text-sm tracking-widest font-poppins opacity-80">
+            <span className="text-sm flex flex-row gap-2  tracking-widest font-poppins opacity-80">
+              <span><NotebookPen /></span>
               {currentDate}
             </span>
             {/* <span className="text-xs opacity-60">
@@ -227,7 +228,7 @@ export default function Home() {
     w-full
     resize-none
     rounded-lg
-    p-2
+    p-1
     outline-none
     font-serif
 
