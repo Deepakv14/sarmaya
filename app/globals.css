@@ -11,6 +11,10 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-mukta: var(--font-mukta);
+  --font-comforter-brush: var(--font-comforter-brush);
+  --font-playfair-display: var(--font-playfair-display);
+  --font-instrument-serif: var(--font-instrument-serif);
+  --font-klee-one: var(--font-klee-one);
 }
 
 @media (prefers-color-scheme: dark) {
